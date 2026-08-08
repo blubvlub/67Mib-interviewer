@@ -147,27 +147,9 @@ function addMessage(role, content, animate = true) {
     chatMessages.appendChild(msgDiv);
     const contentDiv = msgDiv.querySelector('.message-content');
     
-    if (role === 'ai' && animate) {
-        let i = 0;
-        let buffer = "";
-        
-        // Typing effect interval
-        const typeInterval = setInterval(() => {
-            buffer += content.charAt(i);
-            contentDiv.innerHTML = marked.parse(buffer);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-            i++;
-            if (i >= content.length) {
-                clearInterval(typeInterval);
-                contentDiv.innerHTML = marked.parse(content);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            }
-        }, 15); // Adjust typing speed here
-    } else {
-        const parsedContent = role === 'ai' ? marked.parse(content) : content.replace(/\n/g, '<br>');
-        contentDiv.innerHTML = parsedContent;
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
+    const parsedContent = role === 'ai' ? marked.parse(content) : content.replace(/\n/g, '<br>');
+    contentDiv.innerHTML = parsedContent;
+    chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
 // Show typing indicator
@@ -368,6 +350,10 @@ function resetUI() {
     chatInputArea.classList.add('hidden');
     feedbackModal.classList.add('hidden');
     endBtn.removeAttribute('disabled');
+    candidateSelect.removeAttribute('disabled');
+    if (candidateSelect.value !== "") {
+        startBtn.removeAttribute('disabled');
+    }
     currentSessionId = null;
     
     chatMessages.innerHTML = '';

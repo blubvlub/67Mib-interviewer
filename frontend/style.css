@@ -558,8 +558,20 @@ select:disabled { opacity: 0.5; cursor: not-allowed; }
     text-transform: uppercase;
     letter-spacing: 0.05em;
     margin-bottom: 16px;
-    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
 }
+
+.feedback-section h3 .material-symbols-rounded {
+    font-size: 20px;
+}
+
+.strengths-title { color: var(--success); }
+.gaps-title { color: var(--danger); }
+.next-title { color: #3B82F6; /* Blue for next steps */ }
+.summary-title { color: var(--text-primary); }
 
 .feedback-section ul { list-style-position: inside; }
 .feedback-section li { margin-bottom: 8px; color: var(--text-primary); line-height: 1.6; }
