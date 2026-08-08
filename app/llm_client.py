@@ -51,6 +51,11 @@ class LLMClient:
                 max_tokens=max_tokens or settings.MODEL_MAX_TOKENS,
             )
             content = response.choices[0].message.content
+            
+            # Strip out DeepSeek reasoning tags if using a thinking model
+            import re
+            content = re.sub(r'<think>.*?</think>', '', content, flags=re.DOTALL).strip()
+            
             logger.debug(
                 "LLM response: model=%s, tokens_used=%d",
                 self.model,
@@ -92,6 +97,11 @@ class LLMClient:
                 response_format={"type": "json_object"},
             )
             content = response.choices[0].message.content
+            
+            # Strip out DeepSeek reasoning tags if using a thinking model
+            import re
+            content = re.sub(r'<think>.*?</think>', '', content, flags=re.DOTALL).strip()
+            
             logger.debug(
                 "LLM JSON response: model=%s, tokens_used=%d",
                 self.model,

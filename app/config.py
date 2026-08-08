@@ -13,7 +13,7 @@ class Settings:
 
     # Groq LLM settings
     GROQ_API_KEY: str = os.getenv("GROQ_API_KEY", "")
-    MODEL_NAME: str = os.getenv("MODEL_NAME", "llama-3.3-70b-versatile")
+    MODEL_NAME: str = os.getenv("MODEL_NAME", "deepseek-r1-distill-llama-70b")
     MODEL_TEMPERATURE: float = float(os.getenv("MODEL_TEMPERATURE", "0.7"))
     MODEL_MAX_TOKENS: int = int(os.getenv("MODEL_MAX_TOKENS", "1024"))
 
