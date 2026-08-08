@@ -85,7 +85,11 @@ class InterviewEngine:
             len(question_plan),
         )
 
-        return InterviewResponse(reply=reply, done=False)
+        return InterviewResponse(
+            reply=reply, 
+            done=False,
+            progress={"current": session.questions_asked, "total": settings.MAX_QUESTIONS}
+        )
 
     async def handle_turn(
         self,
@@ -157,7 +161,11 @@ class InterviewEngine:
             len(session.topics_covered),
         )
 
-        return InterviewResponse(reply=reply, done=False)
+        return InterviewResponse(
+            reply=reply, 
+            done=False,
+            progress={"current": session.questions_asked, "total": settings.MAX_QUESTIONS}
+        )
 
     async def _end_interview(self, session: SessionState) -> InterviewResponse:
         """Generate feedback and end the interview."""
@@ -177,7 +185,12 @@ class InterviewEngine:
             session.conversation_history.append({"role": "assistant", "content": closing})
             await self.session_manager.update_session(session)
             
-            return InterviewResponse(reply=closing, done=True, feedback=feedback)
+            return InterviewResponse(
+                reply=closing, 
+                done=True, 
+                feedback=feedback,
+                progress={"current": session.questions_asked, "total": settings.MAX_QUESTIONS}
+            )
 
         system_prompt = build_system_prompt(
             session.candidate_analysis,
@@ -233,7 +246,12 @@ class InterviewEngine:
             len(session.topics_covered),
         )
 
-        return InterviewResponse(reply=closing, done=True, feedback=feedback)
+        return InterviewResponse(
+            reply=closing, 
+            done=True, 
+            feedback=feedback,
+            progress={"current": session.questions_asked, "total": settings.MAX_QUESTIONS}
+        )
 
     def _should_end_interview(self, session: SessionState) -> bool:
         """Determine if the interview should end."""

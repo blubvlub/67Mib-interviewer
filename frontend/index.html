@@ -77,6 +77,20 @@
         <main class="chat-container">
             <header class="chat-header">
                 <h2>Technical Assessment</h2>
+                
+                <div class="interview-stats hidden" id="interview-stats">
+                    <div class="stat-timer" id="interview-timer">
+                        <span class="material-symbols-rounded">timer</span>
+                        <span id="timer-display">15:00</span>
+                    </div>
+                    <div class="progress-container" title="Interview Progress">
+                        <span id="progress-text">0/12</span>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill" id="progress-fill" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="header-actions">
                     <button class="icon-btn" id="theme-toggle" title="Toggle Theme">
                         <span class="material-symbols-rounded" id="theme-icon">light_mode</span>

@@ -289,6 +289,59 @@ select:disabled { opacity: 0.5; cursor: not-allowed; }
     font-weight: 500;
 }
 
+.interview-stats {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+}
+
+.stat-timer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--text-primary);
+    transition: color 0.3s ease;
+}
+
+.stat-timer.danger {
+    color: var(--danger);
+    animation: pulse 1s infinite;
+}
+
+.progress-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+#progress-text {
+    font-size: 0.875rem;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    color: var(--text-secondary);
+    min-width: 48px;
+    text-align: right;
+}
+
+.progress-bar-bg {
+    width: 200px;
+    height: 6px;
+    background-color: var(--border-color);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background-color: var(--text-primary);
+    border-radius: 3px;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+
 .header-actions {
     display: flex;
     gap: 12px;

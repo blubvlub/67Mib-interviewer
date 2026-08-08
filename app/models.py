@@ -78,3 +78,6 @@ class InterviewResponse(BaseModel):
     feedback: Optional[Feedback] = Field(
         None, description="Feedback (only when done=true)"
     )
+    progress: Optional[dict[str, int]] = Field(
+        None, description="Progress indicator e.g. {'current': 2, 'total': 12}"
+    )

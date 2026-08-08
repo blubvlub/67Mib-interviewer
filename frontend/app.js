@@ -6,6 +6,12 @@ const API_BASE_URL = 'http://localhost:8000/api';
 let candidatesData = [];
 let currentSessionId = null;
 
+// Timer State
+let timerInterval = null;
+let timeRemaining = 15 * 60; // 15 minutes standard
+let isOvertime = false;
+const overtimeTotal = 60; // 1 minute overtime
+
 // DOM Elements
 const candidateSelect = document.getElementById('candidate-select');
 const candidateDetails = document.getElementById('candidate-details');
@@ -127,6 +133,69 @@ function generateSessionId() {
     return 'sess_' + Math.random().toString(36).substring(2, 9);
 }
 
+// Progress Bar and Timer Logic
+const interviewStats = document.getElementById('interview-stats');
+const timerDisplay = document.getElementById('timer-display');
+const statTimer = document.getElementById('interview-timer');
+const progressText = document.getElementById('progress-text');
+const progressFill = document.getElementById('progress-fill');
+
+function updateProgress(progressData) {
+    if (!progressData) return;
+    const { current, total } = progressData;
+    progressText.textContent = `${current}/${total}`;
+    const percent = Math.min(100, Math.round((current / total) * 100));
+    progressFill.style.width = `${percent}%`;
+}
+
+function stopTimer() {
+    if (timerInterval) clearInterval(timerInterval);
+    timerInterval = null;
+    statTimer.classList.remove('danger');
+}
+
+function startTimer() {
+    stopTimer();
+    timeRemaining = 15 * 60;
+    isOvertime = false;
+    
+    interviewStats.classList.remove('hidden');
+    updateTimerDisplay(timeRemaining);
+    
+    timerInterval = setInterval(() => {
+        timeRemaining--;
+        
+        if (timeRemaining <= 0) {
+            if (!isOvertime) {
+                // Enter overtime
+                isOvertime = true;
+                timeRemaining = overtimeTotal;
+                statTimer.classList.add('danger');
+            } else {
+                // Overtime exhausted, force end
+                stopTimer();
+                forceEndInterview();
+                return;
+            }
+        }
+        
+        // Pulse red if under 2 minutes of standard time
+        if (!isOvertime && timeRemaining <= 120) {
+            statTimer.classList.add('danger');
+        } else if (!isOvertime) {
+            statTimer.classList.remove('danger');
+        }
+        
+        updateTimerDisplay(timeRemaining);
+    }, 1000);
+}
+
+function updateTimerDisplay(seconds) {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    timerDisplay.textContent = `${isOvertime ? '-' : ''}${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+}
+
 // Add message to chat UI
 function addMessage(role, content, animate = true) {
     emptyState.classList.add('hidden');
@@ -219,6 +288,9 @@ startBtn.addEventListener('click', async () => {
         
         hideTyping();
         addMessage('ai', data.reply);
+        if (data.progress) updateProgress(data.progress);
+        
+        startTimer(); // Start the timer on the first question!
         
         messageInput.removeAttribute('disabled');
         messageInput.focus();
@@ -261,6 +333,7 @@ chatForm.addEventListener('submit', async (e) => {
         
         hideTyping();
         addMessage('ai', data.reply);
+        if (data.progress) updateProgress(data.progress);
         
         if (data.done) {
             handleInterviewComplete(data.feedback);
@@ -279,6 +352,7 @@ chatForm.addEventListener('submit', async (e) => {
 
 // Render feedback and show modal
 function handleInterviewComplete(feedback, isForced = false) {
+    stopTimer();
     messageInput.setAttribute('disabled', 'true');
     messageInput.placeholder = "Interview completed.";
     sendBtn.setAttribute('disabled', 'true');
@@ -318,9 +392,13 @@ function handleInterviewComplete(feedback, isForced = false) {
 }
 
 // Force end interview early
-endBtn.addEventListener('click', async () => {
+endBtn.addEventListener('click', () => {
     if (!currentSessionId || !confirm("Are you sure you want to end the interview early?")) return;
-    
+    forceEndInterview();
+});
+
+async function forceEndInterview() {
+    stopTimer();
     messageInput.setAttribute('disabled', 'true');
     sendBtn.setAttribute('disabled', 'true');
     addMessage('user', "I need to stop the interview here.");
@@ -341,6 +419,7 @@ endBtn.addEventListener('click', async () => {
         
         hideTyping();
         addMessage('ai', data.reply);
+        if (data.progress) updateProgress(data.progress);
         if (data.feedback) {
             handleInterviewComplete(data.feedback, true);
         }
@@ -349,9 +428,14 @@ endBtn.addEventListener('click', async () => {
         addMessage('ai', 'Interview ended.');
         resetUI();
     }
-});
+}
 
 function resetSidebar() {
+    stopTimer();
+    interviewStats.classList.add('hidden');
+    progressFill.style.width = '0%';
+    progressText.textContent = '0/12';
+    
     setupPanel.classList.remove('hidden');
     sessionInfo.classList.add('hidden');
     chatInputArea.classList.add('hidden');
