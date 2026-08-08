@@ -1,25 +1,25 @@
-# AI Interview Agent
+# AI Interview Agent | 67Mib
 
-An AI-powered technical interview agent that conducts personalized, multi-turn interviews for candidates of a 31-day AI engineering cohort.
+An enterprise-grade, AI-powered technical interview agent designed for the 31-day AI Engineering Cohort.
 
-Built for the **AI Cohort Hackathon**, this project evaluates candidates by seamlessly adapting to their background, parsing learning signals from their cohort missions, and driving a natural, guided technical conversation.
+Built for the **AI Cohort Hackathon**, this project evaluates candidates by seamlessly adapting to their background, parsing learning signals from their cohort missions, and driving a natural, guided technical conversation. It features a stunning, professional UI and a highly resilient, asynchronous backend.
 
 ---
 
-## 🚀 Features
+## 🚀 Key Features
 
 - **Adaptive Intelligence**: Reads `candidates.json` to map passed/failed/skipped missions to the 31-day curriculum, forming a complete picture of the candidate's strengths and weaknesses.
 - **Dynamic Questioning**: Generates a customized interview plan on the fly. Prioritizes areas where the candidate struggled to probe for true understanding, while verifying depth in their strong areas.
-- **Intelligent Follow-ups**: Evaluates answers in real-time, asking deep follow-up questions or transitioning naturally when a topic is exhausted.
-- **Structured Feedback**: Concludes the interview with an actionable JSON report detailing strengths, gaps, and concrete next steps.
-- **Premium Interface**: A sleek, dark-mode, glassmorphism chat interface (HTML/CSS/JS) with markdown rendering, typing indicators, and full responsiveness.
-- **Robust Architecture**: Built on FastAPI and Uvicorn. Implements resilient LLM client logic to handle rate limits and temporary failures gracefully.
+- **Professional Minimalist UI**: A stunning, high-contrast interface featuring a **Dark/Light Mode Toggle**, pure monochrome palettes, and buttery-smooth message animations.
+- **Live Interview Pressure**: Features a real-time countdown timer (15 minutes + 1 minute overtime) and a live progress bar to simulate the pacing and pressure of a real technical screen. Auto-terminates when time expires.
+- **Concurrent & Asynchronous**: The backend uses `AsyncGroq` and `asyncio`, allowing multiple candidates to be interviewed simultaneously without blocking the server event loop.
+- **Structured Feedback**: Concludes the interview with an actionable JSON report detailing strengths, gaps, and concrete next steps, beautifully rendered in the UI with color-coded badges.
 
 ## 🛠 Tech Stack
 
 - **Backend**: Python 3.10+, FastAPI, Uvicorn, Pydantic
-- **AI/LLM**: Groq API (Llama 3.3 70B Versatile)
-- **Frontend**: HTML5, CSS3 (Custom Dark Theme), Vanilla JavaScript, Marked.js
+- **AI/LLM**: `openai/gpt-oss-120b` (Powered by Groq's Asynchronous Client)
+- **Frontend**: HTML5, CSS3 (CSS Variables for Theming), Vanilla JavaScript, Marked.js
 
 ---
 
@@ -46,19 +46,15 @@ Built for the **AI Cohort Hackathon**, this project evaluates candidates by seam
    ```bash
    cp .env.example .env
    ```
-   Open `.env` and add your **Groq API Key**:
-   ```env
-   GROQ_API_KEY=your_groq_key_here
-   ```
-   *(You can get a free key at [console.groq.com](https://console.groq.com))*
+   Open `.env` and add your API keys.
 
 5. **Start the server**
    ```bash
-   uvicorn app.main:app --reload --port 8000
+   uvicorn app.main:app --port 8000
    ```
 
 6. **Access the application**
-   Open your browser and navigate to: [http://localhost:8000](http://localhost:8000)
+   Open your browser and navigate to: [http://127.0.0.1:8000](http://127.0.0.1:8000)
 
 ---
 
@@ -73,7 +69,7 @@ Built for the **AI Cohort Hackathon**, this project evaluates candidates by seam
 │   ├── interview_engine.py     # Core conversational logic
 │   ├── candidate_analyzer.py   # Analyzes learning signals & curriculum gaps
 │   ├── question_generator.py   # Formulates prioritized interview plans
-│   ├── llm_client.py           # Robust Groq client with rate limit handling
+│   ├── llm_client.py           # Robust Async Groq client with rate limit handling
 │   └── prompts.py              # Tuned prompt templates
 ├── frontend/                   # Web chat interface
 │   ├── index.html              
@@ -82,7 +78,7 @@ Built for the **AI Cohort Hackathon**, this project evaluates candidates by seam
 ├── problem_files/              # Hackathon data (curriculum & candidates)
 ├── tests/                      
 │   └── simulate_interview.py   # Automated evaluation script
-├── .env.example
+├── PROMPTS.md                  # Hackathon AI Usage Log
 ├── requirements.txt
 └── README.md
 ```
@@ -91,7 +87,7 @@ Built for the **AI Cohort Hackathon**, this project evaluates candidates by seam
 
 ## 🧪 Testing
 
-The project includes an automated test script that spins up a virtual candidate and runs a full, 12-turn simulated interview against the local API to verify logic, follow-ups, and rate-limit handling.
+The project includes an automated test script that spins up a virtual candidate and runs a full simulated interview against the local API to verify logic, follow-ups, and rate-limit handling.
 
 To run the simulation:
 ```bash
@@ -107,7 +103,7 @@ The application exactly matches the Hackathon's requested `POST /api/interview` 
 **Start Interview Payload:**
 ```json
 {
-  "sessionId": "session-123",
+  "sessionId": "sess_123xyz",
   "candidate": { ... full candidate object ... }
 }
 ```
@@ -115,8 +111,8 @@ The application exactly matches the Hackathon's requested `POST /api/interview` 
 **Conversation Turn Payload:**
 ```json
 {
-  "sessionId": "session-123",
+  "sessionId": "sess_123xyz",
   "message": "My answer to the question..."
 }
 ```
-*(Supports a special `FORCE_END_INTERVIEW` message to gracefully wrap up demos)*
+*(Supports a special `FORCE_END_INTERVIEW` message to gracefully wrap up demos or when the timer expires)*
