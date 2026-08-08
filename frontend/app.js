@@ -351,7 +351,7 @@ endBtn.addEventListener('click', async () => {
     }
 });
 
-function resetUI() {
+function resetSidebar() {
     setupPanel.classList.remove('hidden');
     sessionInfo.classList.add('hidden');
     chatInputArea.classList.add('hidden');
@@ -362,14 +362,19 @@ function resetUI() {
         startBtn.removeAttribute('disabled');
     }
     currentSessionId = null;
-    
+}
+
+function resetUI() {
+    resetSidebar();
     chatMessages.innerHTML = '';
     chatMessages.appendChild(emptyState);
     emptyState.classList.remove('hidden');
 }
 
 // Modal controls
-closeModalBtn.addEventListener('click', resetUI);
+closeModalBtn.addEventListener('click', () => {
+    resetSidebar();
+});
 newInterviewBtn.addEventListener('click', resetUI);
 
 // Init
