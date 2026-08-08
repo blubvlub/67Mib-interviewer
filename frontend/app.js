@@ -278,11 +278,18 @@ chatForm.addEventListener('submit', async (e) => {
 });
 
 // Render feedback and show modal
-function handleInterviewComplete(feedback) {
+function handleInterviewComplete(feedback, isForced = false) {
     messageInput.setAttribute('disabled', 'true');
     messageInput.placeholder = "Interview completed.";
     sendBtn.setAttribute('disabled', 'true');
     endBtn.setAttribute('disabled', 'true');
+    
+    const modalTitle = document.querySelector('.modal-header h2');
+    if (isForced) {
+        modalTitle.innerHTML = '<span style="color: var(--danger);">Interview Terminated Early</span>';
+    } else {
+        modalTitle.textContent = 'Interview Complete';
+    }
     
     if (feedback) {
         let html = `
@@ -335,7 +342,7 @@ endBtn.addEventListener('click', async () => {
         hideTyping();
         addMessage('ai', data.reply);
         if (data.feedback) {
-            handleInterviewComplete(data.feedback);
+            handleInterviewComplete(data.feedback, true);
         }
     } catch (error) {
         hideTyping();
@@ -362,13 +369,8 @@ function resetUI() {
 }
 
 // Modal controls
-closeModalBtn.addEventListener('click', () => {
-    feedbackModal.classList.add('hidden');
-});
-
-newInterviewBtn.addEventListener('click', () => {
-    resetUI();
-});
+closeModalBtn.addEventListener('click', resetUI);
+newInterviewBtn.addEventListener('click', resetUI);
 
 // Init
 fetchCandidates();
