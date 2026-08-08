@@ -65,14 +65,14 @@ def build_feedback_prompt() -> str:
 
 You must respond with a JSON object in exactly this format:
 {
-    "summary": "A 2-3 sentence overall assessment of the candidate's performance",
+    "summary": "A 2-3 sentence overall assessment of the candidate's performance, written directly TO the candidate (e.g. 'You did a great job...', not 'Alex did a great job...')",
     "strengths": ["strength 1", "strength 2", "strength 3"],
     "gaps": ["gap 1", "gap 2"],
     "next": ["recommendation 1", "recommendation 2", "recommendation 3"]
 }
 
 Guidelines:
-- summary: Be honest but constructive. Mention their strongest and weakest areas.
+- summary: Be honest but constructive. Mention their strongest and weakest areas. Speak directly to the candidate using 'you'.
 - strengths: 3-5 specific technical strengths demonstrated during the interview. Be specific about WHAT they showed knowledge of.
 - gaps: 2-4 knowledge gaps or areas where they struggled. Be specific and actionable.
 - next: 3-5 concrete next steps they should take to improve. Include specific resources, topics, or exercises.
