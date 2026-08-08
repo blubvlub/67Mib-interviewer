@@ -63,6 +63,14 @@ def build_feedback_prompt() -> str:
     """Build the prompt for generating structured interview feedback."""
     return """Based on the complete interview conversation above, generate a comprehensive feedback assessment.
 
+CRITICAL INSTRUCTION TO PREVENT HALLUCINATION:
+If the candidate did not provide any meaningful technical answers (e.g., they only said "hello", "I don't know", or ended the interview early), DO NOT invent or assume their skills based on their background profile. 
+In that scenario:
+- "summary": State clearly that the interview was too short or lacked technical answers to form an assessment.
+- "strengths": ["None demonstrated"]
+- "gaps": ["Incomplete assessment"]
+- "next": ["Restart the interview when ready"]
+
 You must respond with a JSON object in exactly this format:
 {
     "summary": "A 2-3 sentence overall assessment of the candidate's performance, written directly TO the candidate (e.g. 'You did a great job...', not 'Alex did a great job...')",
@@ -72,7 +80,7 @@ You must respond with a JSON object in exactly this format:
 }
 
 Guidelines:
-- summary: Be honest but constructive. Mention their strongest and weakest areas. Speak directly to the candidate using 'you'.
+- summary: Be honest but constructive. Mention their strongest and weakest areas based ONLY on what they actually said. Speak directly to the candidate using 'you'.
 - strengths: 3-5 specific technical strengths demonstrated during the interview. Be specific about WHAT they showed knowledge of.
 - gaps: 2-4 knowledge gaps or areas where they struggled. Be specific and actionable.
 - next: 3-5 concrete next steps they should take to improve. Include specific resources, topics, or exercises.
