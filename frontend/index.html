@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Interview Agent | 67Mib</title>
+    <meta name="description" content="Personalized technical interview agent for the 31-day AI Engineering Cohort.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Material Symbols -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar / Setup Area -->
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="logo">
+                    <span class="material-symbols-rounded">smart_toy</span>
+                </div>
+                <h1>AI Interviewer</h1>
+                <p class="subtitle">Cohort Assessment</p>
+            </div>
+
+            <div class="setup-panel" id="setup-panel">
+                <h2>Interview Setup</h2>
+                
+                <div class="input-group">
+                    <label for="candidate-select">Select Candidate</label>
+                    <div class="select-wrapper">
+                        <select id="candidate-select" disabled>
+                            <option value="">Loading candidates...</option>
+                        </select>
+                        <span class="material-symbols-rounded select-icon">expand_more</span>
+                    </div>
+                </div>
+
+                <div class="candidate-details" id="candidate-details">
+                    <!-- Populated via JS -->
+                </div>
+
+                <button id="start-btn" class="primary-btn" disabled>
+                    <span class="material-symbols-rounded">play_arrow</span>
+                    Start Interview
+                </button>
+            </div>
+
+            <div class="session-info hidden" id="session-info">
+                <h2>Active Session</h2>
+                <div class="info-card">
+                    <div class="info-row">
+                        <span class="material-symbols-rounded">person</span>
+                        <span id="active-candidate-name">...</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="material-symbols-rounded">work</span>
+                        <span id="active-candidate-role">...</span>
+                    </div>
+                    <div class="info-row status-pulse">
+                        <div class="pulse-dot"></div>
+                        <span>Interview in progress</span>
+                    </div>
+                </div>
+                <button id="end-btn" class="danger-btn">
+                    <span class="material-symbols-rounded">stop</span>
+                    Force End Interview
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Chat Area -->
+        <main class="chat-container">
+            <header class="chat-header">
+                <h2>Technical Assessment</h2>
+                <div class="header-actions">
+                    <button class="icon-btn" title="Settings"><span class="material-symbols-rounded">settings</span></button>
+                </div>
+            </header>
+
+            <div class="chat-messages" id="chat-messages">
+                <!-- Welcome State -->
+                <div class="empty-state" id="empty-state">
+                    <div class="empty-icon">
+                        <span class="material-symbols-rounded">forum</span>
+                    </div>
+                    <h3>Ready to Begin</h3>
+                    <p>Select a candidate from the sidebar and start the interview.</p>
+                </div>
+                <!-- Messages populated via JS -->
+            </div>
+
+            <div class="chat-input-area hidden" id="chat-input-area">
+                <form id="chat-form" class="chat-form">
+                    <textarea 
+                        id="message-input" 
+                        placeholder="Type your answer here... (Press Enter to send, Shift+Enter for new line)" 
+                        rows="1" 
+                        required
+                    ></textarea>
+                    <button type="submit" class="send-btn" id="send-btn" title="Send message">
+                        <span class="material-symbols-rounded">send</span>
+                    </button>
+                </form>
+            </div>
+        </main>
+        
+        <!-- Feedback Modal -->
+        <div class="modal-overlay hidden" id="feedback-modal">
+            <div class="modal-content glass-panel">
+                <div class="modal-header">
+                    <h2>Interview Complete</h2>
+                    <button class="close-btn" id="close-modal-btn"><span class="material-symbols-rounded">close</span></button>
+                </div>
+                <div class="modal-body" id="feedback-content">
+                    <!-- Feedback populated via JS -->
+                </div>
+                <div class="modal-footer">
+                    <button class="primary-btn" id="new-interview-btn">Start New Interview</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Markdown Parser (marked.js) -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
