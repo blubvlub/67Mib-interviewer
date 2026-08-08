@@ -23,6 +23,27 @@ const feedbackModal = document.getElementById('feedback-modal');
 const feedbackContent = document.getElementById('feedback-content');
 const closeModalBtn = document.getElementById('close-modal-btn');
 const newInterviewBtn = document.getElementById('new-interview-btn');
+const themeToggle = document.getElementById('theme-toggle');
+const themeIcon = document.getElementById('theme-icon');
+
+// Theme initialization
+const savedTheme = localStorage.getItem("theme");
+if (savedTheme === "light") {
+    document.body.classList.add("light-theme");
+    themeIcon.textContent = "dark_mode";
+}
+
+// Theme toggle listener
+themeToggle.addEventListener("click", () => {
+    document.body.classList.toggle("light-theme");
+    if (document.body.classList.contains("light-theme")) {
+        localStorage.setItem("theme", "light");
+        themeIcon.textContent = "dark_mode";
+    } else {
+        localStorage.setItem("theme", "dark");
+        themeIcon.textContent = "light_mode";
+    }
+});
 
 // Initialize markdown parser
 marked.setOptions({
