@@ -161,6 +161,25 @@ class InterviewEngine:
 
     async def _end_interview(self, session: SessionState) -> InterviewResponse:
         """Generate feedback and end the interview."""
+        
+        # Check if the interview was ended prematurely before any real conversation
+        user_messages = [m for m in session.conversation_history if m["role"] == "user" and m["content"] != "FORCE_END_INTERVIEW"]
+        
+        if not user_messages:
+            feedback = Feedback(
+                summary="The interview was ended before any technical assessment could be made.",
+                strengths=["N/A"],
+                gaps=["Interview was incomplete"],
+                next=["Start a new interview when you are ready."]
+            )
+            closing = f"Thank you for your time, {session.candidate.member.name}. The interview has been ended early."
+            
+            session.is_complete = True
+            session.conversation_history.append({"role": "assistant", "content": closing})
+            await self.session_manager.update_session(session)
+            
+            return InterviewResponse(reply=closing, done=True, feedback=feedback)
+
         system_prompt = build_system_prompt(
             session.candidate_analysis,
             session.curriculum_context,
