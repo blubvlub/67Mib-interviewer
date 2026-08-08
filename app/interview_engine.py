@@ -162,10 +162,9 @@ class InterviewEngine:
     async def _end_interview(self, session: SessionState) -> InterviewResponse:
         """Generate feedback and end the interview."""
         
-        # Check if the interview was ended prematurely before any real conversation
-        user_messages = [m for m in session.conversation_history if m["role"] == "user" and m["content"] != "FORCE_END_INTERVIEW"]
-        
-        if not user_messages:
+        # Check if the interview was ended prematurely before enough conversation happened
+        # If they haven't answered at least 2 technical questions, the AI doesn't have enough context
+        if session.questions_asked <= 2:
             feedback = Feedback(
                 summary="The interview was ended before any technical assessment could be made.",
                 strengths=["N/A"],
