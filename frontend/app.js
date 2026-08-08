@@ -134,22 +134,40 @@ function addMessage(role, content, animate = true) {
     const msgDiv = document.createElement('div');
     msgDiv.className = `message ${role}`;
     
-    const icon = role === 'ai' ? 'smart_toy' : 'person';
-    
-    // Parse markdown if it's the AI's message
-    const parsedContent = role === 'ai' ? marked.parse(content) : content.replace(/\n/g, '<br>');
+    const icon = role === 'ai' ? 'memory' : 'person';
     
     msgDiv.innerHTML = `
         <div class="avatar">
             <span class="material-symbols-rounded">${icon}</span>
         </div>
         <div class="message-content">
-            ${parsedContent}
         </div>
     `;
     
     chatMessages.appendChild(msgDiv);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
+    const contentDiv = msgDiv.querySelector('.message-content');
+    
+    if (role === 'ai' && animate) {
+        let i = 0;
+        let buffer = "";
+        
+        // Typing effect interval
+        const typeInterval = setInterval(() => {
+            buffer += content.charAt(i);
+            contentDiv.innerHTML = marked.parse(buffer);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            i++;
+            if (i >= content.length) {
+                clearInterval(typeInterval);
+                contentDiv.innerHTML = marked.parse(content);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+        }, 15); // Adjust typing speed here
+    } else {
+        const parsedContent = role === 'ai' ? marked.parse(content) : content.replace(/\n/g, '<br>');
+        contentDiv.innerHTML = parsedContent;
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
 }
 
 // Show typing indicator
@@ -160,7 +178,7 @@ function showTyping() {
     
     msgDiv.innerHTML = `
         <div class="avatar">
-            <span class="material-symbols-rounded">smart_toy</span>
+            <span class="material-symbols-rounded">memory</span>
         </div>
         <div class="message-content">
             <div class="typing-indicator">
