@@ -96,6 +96,8 @@ async def interview(request: InterviewRequest):
                 detail="Request must include either 'candidate' (to start) or 'message' (to continue)",
             )
 
+    except HTTPException:
+        raise
     except RuntimeError as e:
         logger.error("Interview error: %s", e)
         raise HTTPException(status_code=503, detail=str(e))

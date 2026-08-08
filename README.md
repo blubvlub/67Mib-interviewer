@@ -85,17 +85,6 @@ Built for the **AI Cohort Hackathon**, this project evaluates candidates by seam
 
 ---
 
-## 🧪 Testing
-
-The project includes an automated test script that spins up a virtual candidate and runs a full simulated interview against the local API to verify logic, follow-ups, and rate-limit handling.
-
-To run the simulation:
-```bash
-python tests/simulate_interview.py
-```
-
----
-
 ## 📜 API Specification
 
 The application exactly matches the Hackathon's requested `POST /api/interview` contract.
