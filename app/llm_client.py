@@ -4,7 +4,7 @@ Handles API calls, retries, and error management.
 """
 
 import logging
-from groq import Groq, APIError, RateLimitError
+from groq import AsyncGroq, APIError, RateLimitError
 from app.config import settings
 
 logger = logging.getLogger(__name__)
@@ -19,7 +19,7 @@ class LLMClient:
                 "GROQ_API_KEY not set. Add it to your .env file. "
                 "Get a free key at https://console.groq.com"
             )
-        self.client = Groq(api_key=settings.GROQ_API_KEY)
+        self.client = AsyncGroq(api_key=settings.GROQ_API_KEY)
         self.model = settings.MODEL_NAME
 
     async def generate(
@@ -44,7 +44,7 @@ class LLMClient:
         full_messages = [{"role": "system", "content": system_prompt}] + messages
 
         try:
-            response = self.client.chat.completions.create(
+            response = await self.client.chat.completions.create(
                 model=self.model,
                 messages=full_messages,
                 temperature=temperature or settings.MODEL_TEMPERATURE,
@@ -89,7 +89,7 @@ class LLMClient:
         full_messages = [{"role": "system", "content": system_prompt}] + messages
 
         try:
-            response = self.client.chat.completions.create(
+            response = await self.client.chat.completions.create(
                 model=self.model,
                 messages=full_messages,
                 temperature=temperature or settings.MODEL_TEMPERATURE,
