@@ -1,0 +1,5 @@
+your task is to go through all the files in ~/problem_files/ folder and help with creating a perfect interviewer program, my idea is to have a python based project with Uvicorn, and using a free ai model as the interviewer. 
+
+While we text your side task is to export conversations without changing content and keeping the same format in "./PROMPTS.md".
+
+Prepare the implementation plan.
