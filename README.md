@@ -58,6 +58,26 @@ Built for the **AI Cohort Hackathon**, this project evaluates candidates by seam
 
 ---
 
+## ☁️ Deployment
+
+The project is fully configured for deployment on serverless or container-based platforms.
+
+### Vercel (Requires GitHub)
+A `vercel.json` configuration is included.
+1. Import your GitHub repository in [Vercel](https://vercel.com).
+2. Add your `GROQ_API_KEY` in the Environment Variables section.
+3. Click **Deploy**.
+
+> **Note**: Vercel's free tier imposes a strict 10-second timeout on Serverless Functions. Since large LLMs (like the 120B model) can sometimes take 10-15 seconds to reply, you may occasionally see `504 Timeout` errors. For a more stable free-tier experience, we recommend Render or Koyeb.
+
+### Render / Koyeb
+If using a platform like Render or Koyeb, use the following start command:
+```bash
+uvicorn app.main:app --host 0.0.0.0 --port 10000
+```
+
+---
+
 ## 🏗 Project Structure
 
 ```text
